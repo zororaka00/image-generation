@@ -13,35 +13,48 @@ interface IdCardProps {
 
 const IdCard: React.FC<IdCardProps> = ({ todo }) => {
   const cardStyle: React.CSSProperties = {
-    backgroundColor: '#f0f0f0',
-    padding: '20px',
-    borderRadius: '10px',
-    width: '300px',
-    fontFamily: 'sans-serif',
-    border: '1px solid #ccc',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    width: '1200px',
+    height: '630px',
+    backgroundColor: '#1a1a1a',
+    color: 'white',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '40px',
+    boxSizing: 'border-box',
+    textAlign: 'center'
   };
 
   const titleStyle: React.CSSProperties = {
-    color: '#333',
-    margin: '0 0 10px 0',
+    fontSize: '60px',
+    margin: '0 0 20px 0',
+    fontWeight: 'bold',
   };
 
   const textStyle: React.CSSProperties = {
-    color: '#666',
-    margin: '0',
+    fontSize: '36px',
+    margin: '0 0 30px 0',
+    maxWidth: '80%'
   };
 
   const statusStyle: React.CSSProperties = {
-    color: todo.completed ? 'green' : 'red',
-    margin: '0',
+    fontSize: '40px',
+    fontWeight: 'bold',
+    color: todo.completed ? '#4caf50' : '#f44336',
+    padding: '10px 20px',
+    borderRadius: '10px',
+    backgroundColor: todo.completed ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
   };
 
   return (
     <div style={cardStyle}>
-      <h2 style={titleStyle}>ID: {todo.id}</h2>
-      <p style={textStyle}>Title: {todo.title}</p>
-      <p style={statusStyle}>Completed: {todo.completed ? 'Yes' : 'No'}</p>
+      <h1 style={titleStyle}>Task #{todo.id}</h1>
+      <p style={textStyle}>{todo.title}</p>
+      <div style={statusStyle}>
+        {todo.completed ? 'Completed' : 'Pending'}
+      </div>
     </div>
   );
 };

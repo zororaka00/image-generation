@@ -6,6 +6,7 @@ import fetch from 'node-fetch';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import IdCard from './src/IdCard.tsx';
+import nodeHtmlToImage from 'node-html-to-image';
 
 interface Todo {
   userId: number;
@@ -26,28 +27,13 @@ app.get('/:todosId.png', async (req: Request, res: Response) => {
 
     const componentHtml = ReactDOMServer.renderToString(React.createElement(IdCard, { todo: data }));
 
-    const html = `
-      <html>
-        <head>
-          <title>Todo ${data.id}</title>
-          <meta property="og:title" content="Todo ${data.id}" />
-          <meta property="og:description" content="${data.title}" />
-          <meta property="og:image" content="http://localhost:5173/${todosId}.png" />
-          <meta property="og:type" content="website" />
+    const image = await nodeHtmlToImage({
+      html: `<html><head><style>body { width: 1200px; height: 630px; margin: 0; }</style></head><body>${componentHtml}</body></html>`,
+       puppeteerArgs: { args: ['--no-sandbox'] }
+    });
 
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="Todo ${data.id}" />
-          <meta name="twitter:description" content="${data.title}" />
-          <meta name="twitter:image" content="http://localhost:5173/${todosId}.png" />
-        </head>
-        <body style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f4f4;">
-          ${componentHtml}
-        </body>
-      </html>
-    `;
-
-    res.setHeader('Content-Type', 'text/html');
-    res.send(html);
+    res.setHeader('Content-Type', 'image/png');
+    res.send(image);
   } catch (error) {
     console.error(error);
     res.status(500).send('Something went wrong');
